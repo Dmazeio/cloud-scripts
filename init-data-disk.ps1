@@ -1,17 +1,9 @@
-$disks = Get-Disk | Sort-Object Number
-# 83..89 = S..Y
-$letters = 83..89 | ForEach-Object { [char]$_ }
-$count = 0
-$label = "datadisk"
-
-for($index = 1; $index -lt $disks.Count; $index++) {
-    $driveLetter = $letters[$count].ToString()
-    if ($disks[$index].partitionstyle -eq 'raw') {
-        $disks[$index] | Initialize-Disk -PartitionStyle MBR -PassThru |
-            New-Partition -UseMaximumSize -DriveLetter $driveLetter |
-            Format-Volume -FileSystem NTFS -NewFileSystemLabel "$label.$count" -Confirm:$false -Force
-    } else {
-        $disks[$index] | Get-Partition | Set-Partition -NewDriveLetter $driveLetter
-    }
-    $count++
+$disk = Get-Disk -Number 1
+$driveLetter = "S"
+if ($disk.partitionstyle -eq 'raw') {
+    $disk | Initialize-Disk -PartitionStyle MBR -PassThru |
+        New-Partition -UseMaximumSize -DriveLetter $driveLetter |
+        Format-Volume -FileSystem NTFS -NewFileSystemLabel "SvcFab" -Confirm:$false -Force
+} else {
+    $disk | Get-Partition | Set-Partition -NewDriveLetter $driveLetter
 }
