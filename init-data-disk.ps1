@@ -18,4 +18,4 @@ $part = Initialize-Disk -Number $disk.Number -PartitionStyle GPT -PassThru |
         New-Partition -DriveLetter $DriveLetter -UseMaximumSize
 
 Format-Volume -Partition $part -FileSystem NTFS -NewFileSystemLabel $Label -Confirm:$false
-Write-Host "Disk at LUN $Lun initialized as $DriveLetter:` with label '$Label'."
+Write-Host "Disk at LUN $Lun initialized as $DriveLetter with label '$Label'."
